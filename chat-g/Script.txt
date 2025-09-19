@@ -11,7 +11,7 @@ Quando chegar na Mensagem 51 carregar até a 100° mensagem,
 Roteiro
 Criar context
 
-import React, { usaeState, createContext } from " React";
+import React, { useState, createContext } from " React";
 
 export const Context = createContext(); '''isso é necessario, tenho que entrender'''
 
@@ -98,12 +98,87 @@ export default function LoginPage() {
 
 
 nela vai ter o login.
+mas opa precisamos das funções do firebase nesse projeto inteiro.
+1.2 Importar o firebase pro projeto
 
+
+
+
+
+
+
+
+
+Codigo utilizado na base do projeto
+--------------------------------------
+import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBKjBLmbBheTFZfKfaUyb-6A9ZVcZURznY",
+  authDomain: "chat-g-be22c.firebaseapp.com",
+  projectId: "chat-g-be22c",
+  storageBucket: "chat-g-be22c.firebasestorage.app",
+  messagingSenderId: "353627350419",
+  appId: "1:353627350419:web:7feceb5bb76f5d63f53466",
+  measurementId: "G-R1R4NPSPBL"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app)
+const storage = getStorage(app)
+
+export default { auth, db, storage}
+---------------------------------------------
+
+para importar 
+import { auth } from '../../firebaseConfig'; 
+import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 Passo 2
 Crie o context de autenticação.
 
-Vamos criar um context oara guardar a informação do usuario cara. 
+Vamos criar um context para guardar a informação do usuario cara. 
 app/context/AuthContext.tsx
+
+codigo utilizado:
+____________________________________
+
+"use client";
+
+import { createContext, useContext }
+import { auth } from "../../firebaseConfig";
+import { onAuthStateChanged, User } from "firebase/auth";
+
+
+export const AuthContext = createContext<User | null>(null);
+export const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
+  const [user, setUser] = useState< User | null>(null);
+  const [loading, setLoading] = useState()
+
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) -> {
+      setUser(currentUser);
+      setLoading(false);
+    });
+
+
+
+    return () => unsubscribe();
+  }, []);
+
+
+  return(
+    <AuthContext.Provider.Provider value={user}>
+      {loading? <div> Carregando...</div> : children}
+    </AuthContext.Provider>
+  )
+
+}
+export 
 
 codigo para ser estudado
 
@@ -112,6 +187,11 @@ codigo para ser estudado
 import { createContext, useContext, useEffect, useState } from "react";
 import { auth } from "../../firebaseConfig"; // Importa a sua instância do Firebase
 import { onAuthStateChanged, User } from "firebase/auth";
+
+export const useAuth = () => {
+  return useContext(AuthContext);
+}
+
 
 // 1. Criação do Contexto
 export const AuthContext = createContext<User | null>(null);
@@ -205,3 +285,28 @@ export const config = {
     '/login' // Protege a rota de login para usuários já logados
   ],
 };
+
+
+Codigo para depois 
+
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyBKjBLmbBheTFZfKfaUyb-6A9ZVcZURznY",
+  authDomain: "chat-g-be22c.firebaseapp.com",
+  projectId: "chat-g-be22c",
+  storageBucket: "chat-g-be22c.firebasestorage.app",
+  messagingSenderId: "353627350419",
+  appId: "1:353627350419:web:7feceb5bb76f5d63f53466",
+  measurementId: "G-R1R4NPSPBL"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
