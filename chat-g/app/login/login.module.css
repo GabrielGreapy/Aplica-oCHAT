@@ -1,0 +1,49 @@
+:root[data-theme="light"] {
+  --text: #112105;
+  --background: #f9fef6;
+  --primary: #6fdc26;
+  --secondary: #7eea9f;
+  --accent: #5fe5a2;
+}
+:root[data-theme="dark"] {
+  --text: #ebfae0;
+  --background: #040901;
+  --primary: #6bd723;
+  --secondary: #157f35;
+  --accent: #1a9e5c;
+}
+
+
+
+.loginButton{
+    height: 40px;
+    width: 200px;
+    
+}
+
+.container-body-login{
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+.container-login{
+    height: 100%;
+    width: 90%;
+}
+.welcome{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    font-size: larger;
+}
+.login-div{
+    display: flex;
+    height: 100px;
+    justify-content: center;
+    align-items: center;
+    
+}
+

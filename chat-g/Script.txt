@@ -44,6 +44,10 @@ Passo 1
 Criar a pagina Login.
 app/login/page.tsx.
 
+
+
+
+
 Codigo a ser analisado
 
 "use client";
@@ -78,6 +82,7 @@ export default function LoginPage() {
         setError('Ocorreu um erro no login com o Google. Tente novamente.');
       }
     }
+    
   };
 
   return (
@@ -178,7 +183,9 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
   )
 
 }
-export 
+export const useAuth = () => {
+  return useContext(AuthContext);
+};
 
 codigo para ser estudado
 
