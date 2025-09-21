@@ -23,7 +23,7 @@ export default function Login(){
 
     return(
         <div className={styles["container-body-login"]}>
-            <div className="container-login">
+            <div className={styles["container-login"]}>
                 <div className={styles["welcome"]}>
                     Bem vindo ao Chat-G
                 </div>
