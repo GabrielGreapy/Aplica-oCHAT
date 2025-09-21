@@ -1,7 +1,6 @@
 "use client";
 
 import { auth } from "@/Firebase/FirebaseConfig";
-import { error } from "console";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useRouter } from "next/navigation";
 
@@ -13,7 +12,13 @@ export default function Login(){
         const provider = new GoogleAuthProvider();
         
         try{
-            await signInWithPopup(auth , provider)
+            const userCredential = await signInWithPopup(auth , provider);
+            const idToken = await userCredential.user.getIdToken();
+            await fetch('/api/session', {
+                method:'POST',
+                headers: { 'Content-Type' : 'application/json'},
+                body: JSON.stringify({ idToken }),
+            });
             router.push("/");
         }
         catch(err: any){ 
