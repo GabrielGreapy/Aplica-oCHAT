@@ -317,3 +317,68 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+como funcionará o db
+
+
+Preciso de um sistema de online e offline.
+  posso usar o node ou sistema de db do firebase. node seria bem mais rapido
+  mas eu teria que fazer um servidor express entao seria apos de eu quase terminar essa app
+
+
+Preciso de algo que identifique com quem converso,
+  O que utilizaria 
+
+
+
+Preciso de algo que consiga separar minhas cpnversas das que nao sao minhas
+  para isso precisa salvar info de usuarios para identifica-los, claro o auth do fbdb funciiona
+  quais info que preciso
+    Nome de usuario
+    Email
+    
+Preciso de algo que crie perfis de cada usuario.
+
+Como funcionaria o database?
+  candidato a
+    usuario(idDoFirebase)
+      Nome,
+      Email, | [idDoFirebase]
+  Cada usuario poderia ter suas coleções com as conversas deles
+      conversa(idDaConversaNoFirebase)
+        participante A,
+        participante B.
+          ELIMINADO POIS TERIA QUE CRIAR UMA COLEÇÃO IDENTICA NOS DOIS PARTICIPANTES,  a nao ser que a itenção seja isso msm
+  
+  candidato b
+    usuario(idDoFirebase)
+      Nome,
+      Email, | [idDoFirebase]
+      avatar : fotinha
+    conversas(idDaConversaNoFirebase)
+      Participantes : participante a, b
+      Ultima mensagem : msg,
+  
+      TimestampDaUltimaMenSAGEM : MSGTS
+        na coleção de conversas teria mais uma coleção para as mensagens,
+        remetente : participante a ,
+        horarioDeEnvio : "",
+        mesnsagem : "",
+        status : lida, enviada, entregue
+
+    Funcionaria mas há alguma melhor maneira???
