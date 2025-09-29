@@ -38,6 +38,8 @@ export const config = {
       '/',
       '/chat/:path*',
       '/login',
+      '/settings',
+      '/chats',
     ],
     runtime: 'nodejs'
 }
