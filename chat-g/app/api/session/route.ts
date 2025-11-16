@@ -19,7 +19,7 @@ export async function POST(req: Request) {
         })
         return response;
     } catch(error){
-        return NextResponse.json({ error:"Token invalido"}, { status: 401 })
+        return NextResponse.json({ error:"Token invalido"}, { status: 401})
     }
 }
 export async function DELETE(request: NextRequest){

@@ -1,0 +1,1 @@
+Aqui deixarei alguns componentes de perfil para facilitar a utilização deles em outros lugares, isso vai facilitar e evitar a repetição de codigo.

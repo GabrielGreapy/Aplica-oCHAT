@@ -19,13 +19,13 @@ import {
 } from '@mui/material';
 import { useChatInfo } from '@/context/ChatInfoContext';
 
-// 👇 1. IMPORTE O SEU NOVO COMPONENTE 👇
-import ChatListHeader from '@/app/components/ChatListHeader'; // ⚠️ Ajuste o caminho se necessário
+
+import ChatListHeader from '@/app/components/ChatListHeader'; 
 import { collection, onSnapshot, orderBy, query, where } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth, db } from '@/Firebase/FirebaseConfig';
 
-// ... sua interface Chat ...
+
 interface Chat {
   id: string;
   chatName: string;
@@ -42,7 +42,7 @@ export default function ChatsPage() {
     const [currentUser, setCurrentUser] = useState(auth.currentUser);
 
     useEffect(() => {
-        // ... sua lógica de autenticação ...
+       
         const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
             setCurrentUser(user);
         });
@@ -50,7 +50,7 @@ export default function ChatsPage() {
     }, []);
 
     useEffect(() => {
-        // ... sua lógica de busca de chats ...
+        
         if (!currentUser) {
             setLoading(false);
             setChats([]);
@@ -79,7 +79,7 @@ export default function ChatsPage() {
         return () => unsubscribeFirestore();
     }, [currentUser]);
 
-    // ... sua lógica de loading e lista vazia fica igual ...
+   
     if (loading) {
         return <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}><CircularProgress /></Box>;
     }

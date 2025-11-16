@@ -1,11 +1,9 @@
-// src/app/(main)/settings/page.tsx
 'use client';
 
 import { useState } from 'react';
 import {
   Box,
   Typography,
-  Avatar,
   TextField,
   Button,
   Divider,
@@ -14,6 +12,7 @@ import {
   Stack,
   Alert
 } from '@mui/material';
+import ProfilePicture from '@/app/components/profileComponents/profilePicture';
 import LogoffButton from '@/app/components/button-logoff';
 
 export default function SettingsPage() {
@@ -27,8 +26,7 @@ export default function SettingsPage() {
 
   const handleDarkModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDarkMode(event.target.checked);
-    // Em uma aplicação real, aqui você chamaria uma função do seu context de tema
-    // para de fato trocar o tema da aplicação.
+    
   };
 
   return (
@@ -40,10 +38,7 @@ export default function SettingsPage() {
             Perfil
           </Typography>
           <Stack spacing={2} direction="row" alignItems="center">
-            <Avatar
-              sx={{ width: 80, height: 80 }}
-              src="https://i.pravatar.cc/150?u=a042581f4e29026704d" // Avatar de exemplo
-            />
+            <ProfilePicture />
             <Button variant="outlined">Mudar Foto</Button>
           </Stack>
           <Stack spacing={2} sx={{ mt: 3 }}>
@@ -64,7 +59,7 @@ export default function SettingsPage() {
 
         <Divider />
 
-        {/* --- Seção de Preferências --- */}
+       
         <Box>
           <Typography variant="h5" gutterBottom>
             Preferências
