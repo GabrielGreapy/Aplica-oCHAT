@@ -2,7 +2,6 @@
 
 import React,{ useContext} from "react"
 import { Avatar} from "@mui/material"
-import { auth, db} from "@/Firebase/FirebaseConfig" 
 import { AuthContext } from "@/context/AuthContext"
 
 export default function ProfilePicture(){
