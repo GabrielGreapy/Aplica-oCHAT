@@ -18,18 +18,8 @@ import ProfileUserName from '@/app/components/profileComponents/profileUserName'
 import ProfileEmail from '@/app/components/profileComponents/profileEmail';
 import ProfileTicket from '@/app/components/profileComponents/profileTicket';
 export default function SettingsPage() {
-  // Estados para controlar os switches (deixando a UI interativa)
-  const [notifications, setNotifications] = useState(true);
-  const [darkMode, setDarkMode] = useState(false);
+ 
 
-  const handleNotificationsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNotifications(event.target.checked);
-  };
-
-  const handleDarkModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDarkMode(event.target.checked);
-    
-  };
 
   return (
     <Box sx={{ p: { xs: 2, sm: 3 } }}>
@@ -56,17 +46,7 @@ export default function SettingsPage() {
           <Typography variant="h5" gutterBottom>
             Preferências
           </Typography>
-          <Stack>
-            <FormControlLabel
-              control={<Switch checked={notifications} onChange={handleNotificationsChange} />}
-              label="Receber notificações no desktop"
-            />
-            <FormControlLabel
-              control={<Switch checked={darkMode} onChange={handleDarkModeChange} />}
-              label="Modo Escuro (Dark Mode)"
-            />
-            {darkMode && <Alert severity="info" sx={{mt: 1}}>O modo escuro é apenas uma demonstração visual neste componente.</Alert>}
-          </Stack>
+        
         </Box>
 
         <Divider />

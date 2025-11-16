@@ -26,6 +26,6 @@ export default function ProfileTicket(){
     return(
         <Button variant="contained"
         onClick={copiarTicket}
-        disabled={!user}>Copiar Ticket</Button>
+        disabled={!user}>Copiar codigo</Button>
     )
 }
