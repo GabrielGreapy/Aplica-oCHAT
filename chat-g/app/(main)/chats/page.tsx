@@ -84,7 +84,6 @@ export default function ChatsPage() {
         return <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}><CircularProgress /></Box>;
     }
     if (chats.length === 0) {
-        // Podemos melhorar a UI da lista vazia para incluir o cabeçalho
         return (
             <Box sx={{ bgcolor: 'background.paper', height: '100%'}}>
                 <ChatListHeader />

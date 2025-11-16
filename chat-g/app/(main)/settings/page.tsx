@@ -14,6 +14,8 @@ import {
 } from '@mui/material';
 import ProfilePicture from '@/app/components/profileComponents/profilePicture';
 import LogoffButton from '@/app/components/button-logoff';
+import ProfileUserName from '@/app/components/profileComponents/profileUserName';
+import ProfileEmail from '@/app/components/profileComponents/profileEmail';
 
 export default function SettingsPage() {
   // Estados para controlar os switches (deixando a UI interativa)
@@ -39,21 +41,11 @@ export default function SettingsPage() {
           </Typography>
           <Stack spacing={2} direction="row" alignItems="center">
             <ProfilePicture />
-            <Button variant="outlined">Mudar Foto</Button>
+            <ProfileUserName />
+            
           </Stack>
           <Stack spacing={2} sx={{ mt: 3 }}>
-            <TextField
-              label="Nome de Usuário"
-              variant="outlined"
-              defaultValue="Seu Nome"
-              fullWidth
-            />
-            <TextField
-              label="Email"
-              variant="outlined"
-              defaultValue="seuemail@exemplo.com"
-              fullWidth
-            />
+            <ProfileEmail />
           </Stack>
         </Box>
 
@@ -85,7 +77,7 @@ export default function SettingsPage() {
             Conta
           </Typography>
           <Stack spacing={2} direction={{xs: 'column', sm: 'row'}} alignItems="flex-start">
-            <Button variant="contained">Salvar Alterações</Button>
+            <Button variant="contained">Copiar Ticket</Button>
             <LogoffButton />
 
           </Stack>
