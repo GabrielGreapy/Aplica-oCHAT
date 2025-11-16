@@ -16,7 +16,7 @@ import ProfilePicture from '@/app/components/profileComponents/profilePicture';
 import LogoffButton from '@/app/components/button-logoff';
 import ProfileUserName from '@/app/components/profileComponents/profileUserName';
 import ProfileEmail from '@/app/components/profileComponents/profileEmail';
-
+import ProfileTicket from '@/app/components/profileComponents/profileTicket';
 export default function SettingsPage() {
   // Estados para controlar os switches (deixando a UI interativa)
   const [notifications, setNotifications] = useState(true);
@@ -77,7 +77,7 @@ export default function SettingsPage() {
             Conta
           </Typography>
           <Stack spacing={2} direction={{xs: 'column', sm: 'row'}} alignItems="flex-start">
-            <Button variant="contained">Copiar Ticket</Button>
+            <ProfileTicket />
             <LogoffButton />
 
           </Stack>
