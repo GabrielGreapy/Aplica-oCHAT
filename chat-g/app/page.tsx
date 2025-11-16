@@ -18,7 +18,7 @@ export default function HomePage() {
           Bem-vindo ao Chat-G
         </Typography>
         <Typography variant="h5" color="text.secondary">
-          Selecione uma conversa para começar.
+          Veja seus chats!
         </Typography>
       </Box>
     </Container>

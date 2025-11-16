@@ -14,6 +14,7 @@ import {
   Stack,
   Alert
 } from '@mui/material';
+import LogoffButton from '@/app/components/button-logoff';
 
 export default function SettingsPage() {
   // Estados para controlar os switches (deixando a UI interativa)
@@ -90,9 +91,8 @@ export default function SettingsPage() {
           </Typography>
           <Stack spacing={2} direction={{xs: 'column', sm: 'row'}} alignItems="flex-start">
             <Button variant="contained">Salvar Alterações</Button>
-            <Button variant="outlined" color="error">
-              Desativar Conta
-            </Button>
+            <LogoffButton />
+
           </Stack>
         </Box>
       </Stack>

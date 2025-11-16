@@ -26,15 +26,20 @@ export default function LoginButton(){
                 await updateDoc(userRef, {
                     lastLogin : new Date(),
                 })
+                console.log("Conta ja existe. logando")
             }
-            await setDoc( doc( db, "users", user.uid), {
-                uid : user.uid, 
-                name : user.displayName,
-                email : user.email,
-                avatarURL : user.photoURL,
-                createdAr : new Date(),
-                lastLogin : new Date(),
-            });
+            else{
+                await setDoc( doc( db, "users", user.uid), {
+                    uid : user.uid, 
+                    name : user.displayName,
+                    email : user.email,
+                    avatarURL : user.photoURL,
+                    createdAt : new Date(),
+                    lastLogin : new Date(),
+                });
+                console.log("Conta sendo criada")
+            }
+            console.log("Logando...")
 
 
 
@@ -44,7 +49,7 @@ export default function LoginButton(){
                 headers: { 'Content-Type' : 'application/json'},
                 body: JSON.stringify({ idToken }),
             });
-            router.push("/");
+            router.push("/chats");
         }
         catch(err: any){ 
             console.log(err);

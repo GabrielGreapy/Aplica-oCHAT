@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { adminAuth } from "./firebaseAdmin";
 
+
 const publicPaths = ['/login'];
 
 const isAuthenticated = async (req: NextRequest) => {
@@ -27,7 +28,7 @@ export async function middleware(request: NextRequest){
 
 
   if( userIsAuthenticated && isPublicPath){
-    const homeUrl = new URL ( '/', request.url);
+    const homeUrl = new URL ( '/chats', request.url);
     return NextResponse.redirect(homeUrl);
   }
 

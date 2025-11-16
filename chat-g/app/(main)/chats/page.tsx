@@ -1,9 +1,9 @@
 'use client';
 
-// Importe os hooks do React que vamos usar
+
 import React, { useState, useEffect } from 'react';
 
-// ... todos os outros imports do Firebase e Material-UI ...
+
 import {
   Box,
   Typography,
@@ -21,6 +21,9 @@ import { useChatInfo } from '@/context/ChatInfoContext';
 
 // 👇 1. IMPORTE O SEU NOVO COMPONENTE 👇
 import ChatListHeader from '@/app/components/ChatListHeader'; // ⚠️ Ajuste o caminho se necessário
+import { collection, onSnapshot, orderBy, query, where } from 'firebase/firestore';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth, db } from '@/Firebase/FirebaseConfig';
 
 // ... sua interface Chat ...
 interface Chat {
@@ -33,8 +36,7 @@ interface Chat {
 }
 
 export default function ChatsPage() {
-    // ... toda a sua lógica de hooks e useEffects fica igual ...
-    const { selectedChatUid, setSelectedChatUid } = useChatInfo();
+    const { chatSelecionado, setChatSelecionado } = useChatInfo();
     const [chats, setChats] = useState<Chat[]>([]);
     const [loading, setLoading] = useState(true);
     const [currentUser, setCurrentUser] = useState(auth.currentUser);
@@ -93,10 +95,8 @@ export default function ChatsPage() {
 
     return (
         <Box sx={{ bgcolor: 'background.paper', height: '100%', display: 'flex', flexDirection: 'column' }}>
-            {/* 👇 2. USE O COMPONENTE AQUI, SIMPLES E LIMPO 👇 */}
+            
             <ChatListHeader />
-
-            {/* A lista de contatos agora tem rolagem interna */}
             <Box sx={{ flexGrow: 1, overflowY: 'auto' }}>
                 <List sx={{ padding: 0 }}>
                     {chats.map((chat) => (
@@ -105,8 +105,13 @@ export default function ChatsPage() {
                           <ListItem disablePadding>
                                 <ListItemButton
                                     sx={{ p: { xs: 1.5, sm: 2 } }}
-                                    onClick={() => setSelectedChatUid(chat.id)}
-                                    selected={selectedChatUid === chat.id}
+                                    onClick={() => setChatSelecionado({
+                                        id: chat.id,
+                                        name: chat.chatName, 
+                                        avatarUrl: chat.avatarUrl,
+                                    })}
+
+                                    selected={chatSelecionado?.id === chat.id}
                                 >
                                     <ListItemAvatar>
                                         <Badge color="primary" badgeContent={chat.unreadCount} invisible={!chat.unreadCount || chat.unreadCount === 0}>
