@@ -5,6 +5,7 @@ import { Box, Typography, IconButton, Dialog, DialogTitle, DialogContent } from 
 import AddIcon from '@mui/icons-material/Add';
 import ProfilePicture from '../profileComponents/profilePicture';
 import PopUpAddNewChat from '@/app/components/chatComponents/popUpAddNewChat'
+import RequestsNotifications from './requestsNotifications';
 export default function ChatListHeader() {
   const [ open, setOpen] = useState(false)
 
@@ -37,13 +38,16 @@ export default function ChatListHeader() {
           </Typography>
           <AddIcon />
         </IconButton>
-        
+        <PopUpAddNewChat 
+          open={open}
+          onClose={() => setOpen(false)}
+        />
+        <RequestsNotifications />
+
       </Box>
       
-      <PopUpAddNewChat 
-        open={open}
-        onClose={() => setOpen(false)}
-      />
+      
+      
 
       
     </>
