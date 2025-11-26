@@ -48,30 +48,6 @@ export default function PopUpAddNewChat({ open, onClose} : PopUpProps){
                 return;
             }
             
-            
-            // const chatsRef = collection( db, 'chats')
-
-            // try (await addDoc(chatsRef,{
-            //         participantIds: [ auth.currentUser?.uid, usuarioLocalizadoDados],
-            //         participantsInfo: {
-            //             [auth.currentUser?.uid] : {
-            //                 name: auth.currentUser?.displayName,
-            //                 avatarUrl :  auth.currentUser?.avatarUrl
-            //             },
-                    
-            //         lastMessage : "Conversa iniciada", 
-            //         lastMessageTimeStamp: serverTimestamp(),
-            //         unreadCount: {
-            //             [auth.currentUser?.uid] : 0 ,
-            //             [usuarioLocalizado.uid] : 1, 
-            //         }
-            //         }
-                    
-            //     })
-            //     console.log("Conversa criada com sucesso"),
-            // )catch(error){
-            //     console.log( "algo deu errado... " + error)
-            // }
 
             console.log("Processo de pedido terminado")
             setCodigoAdd("")

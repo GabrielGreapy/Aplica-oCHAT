@@ -31,9 +31,11 @@ export default function AcceptRequest({ requestId, currentUser, requestSender} :
                         displayName : requestSender.name,
                         photoUrl : requestSender.avatarUrl || null
                     },
-                    lastMessage : "Chat iniciado",
-                    timestamp : serverTimestamp()
-                }
+                    
+                },
+                lastMessage : "Chat iniciado",
+                timestamp : serverTimestamp()
+
             }
         )
             const requestRef = doc(db, 'users', currentUser.uid, 'requests', requestId)

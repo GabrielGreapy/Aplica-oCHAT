@@ -4,7 +4,6 @@ import { Avatar, Button, CircularProgress, Dialog, DialogActions, DialogContent,
 import { useEffect, useState } from "react"
 import { collection, onSnapshot, orderBy, query, where } from "firebase/firestore";
 import { auth, db } from "@/Firebase/FirebaseConfig";
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import RejectRequest from "./rejectRequest";
 import AcceptRequest from "./acceptRequest";
 
@@ -100,7 +99,7 @@ export default function NotificationList({ open, onClose} : notificationsListPro
                                         </Avatar>
                                     </ListItemAvatar>
 
-                                    {/* 2. O Texto */}
+                                    
                                     <ListItemText 
                                         primary={request.from || "Usuário"}
                                         secondary="Quer iniciar uma conversa"

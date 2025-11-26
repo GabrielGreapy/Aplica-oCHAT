@@ -22,11 +22,11 @@ import ChatListHeader from '@/app/components/chatComponents/ChatListHeader';
 
  
 import { collection, onSnapshot, orderBy, query, where } from 'firebase/firestore';
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged, User } from 'firebase/auth';
 import { auth, db } from '@/Firebase/FirebaseConfig';
 
 
-interface Chat {
+interface Chats {
   id: string;
   chatName: string;
   lastMessage?: string;
@@ -38,49 +38,59 @@ interface Chat {
 export default function ChatsPage() {
     
     const { chatSelecionado, setChatSelecionado } = useChatInfo();
-    const [ chats, setChats] = useState<Chat[]>([]);
+    const [ chats, setChats] = useState<Chats[]>([]);
     const  [loading, setLoading] = useState(true);
-    const [ currentUser, setCurrentUser] = useState(auth.currentUser);
-
+    const [ user, setUser] = useState<User | null>(auth.currentUser)
+    
+    useEffect(() => {
+        const unsubscribeAut = onAuthStateChanged(auth, (currentUser) => {
+            setUser(currentUser)
+            if(!currentUser){
+                setLoading(false)
+            }
+        })
+    }, [])
 
 
     useEffect(() => {
-       
-        const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
-            setCurrentUser(user);
-        });
-        return () => unsubscribeAuth();
-    }, []);
+        if(!user) return;
 
-    useEffect(() => {
-        
-        if (!currentUser) {
-            setLoading(false);
-            setChats([]);
-            return;
-        };
-        setLoading(true);
-        const chatsRef = collection(db, 'chats');
-        const q = query(chatsRef, where('participantIDs', 'array-contains', currentUser.uid), orderBy('lastMessageTimestamp', 'desc'));
-        const unsubscribeFirestore = onSnapshot(q, (querySnapshot) => {
-            const chatsData: Chat[] = querySnapshot.docs.map(doc => {
+        const chatsRef = collection(db, 'chats')
+        const q = query(
+            chatsRef, 
+            where('usersId', 'array-contains', auth.currentUser?.uid),
+            orderBy('timestamp', 'desc'))
+
+            
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+            const loadedChats = snapshot.docs.map( doc => {
                 const data = doc.data();
-                const otherParticipantId = data.participantIDs.find((id: string) => id !== currentUser.uid);
-                const otherParticipantInfo = data.participantsInfo[otherParticipantId];
-                return {
+
+                const otherUserId = data.usersId.find((id : string) => id !== user.uid);
+                const otherUserData = data.usersData[otherUserId];
+
+                return{
                     id: doc.id,
-                    chatName: otherParticipantInfo?.name || 'Chat',
-                    avatarUrl: otherParticipantInfo?.avatarUrl || '',
-                    lastMessage: data.lastMessage || '',
-                    timestamp: data.lastMessageTimestamp?.toDate(),
-                    unreadCount: data.unreadCount?.[currentUser.uid] || 0,
-                };
-            });
-            setChats(chatsData);
-            setLoading(false);
-        });
-        return () => unsubscribeFirestore();
-    }, [currentUser]);
+                    chatName : otherUserData?.displayName || "Usuario desconhecido",
+                    avatarUrl : otherUserData?.photoUrl || "",
+                    lastMessage : data.lastMessage,
+                    unreadCount : 0,
+                    timestamp : data.timestamp?.toDate(),
+                }
+            })
+
+            setChats(loadedChats)
+            setLoading(false)
+        }, (error) =>{
+            console.error("Erro ao buscar chats: " , error)
+        })
+        return () => unsubscribe();
+    }, [auth.currentUser])
+
+
+
+    
+  
 
    
     if (loading) {
