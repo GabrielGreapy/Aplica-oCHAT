@@ -11,7 +11,7 @@ export default function HomePage() {
           flexDirection: 'column', 
           justifyContent: 'center', 
           alignItems: 'center',
-          height: '60vh' // Ocupa uma boa parte da altura da tela
+          height: '60vh'
         }}
       >
         <Typography variant="h2" component="h1" gutterBottom>

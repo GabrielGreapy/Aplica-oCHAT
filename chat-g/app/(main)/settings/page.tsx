@@ -24,7 +24,6 @@ export default function SettingsPage() {
   return (
     <Box sx={{ p: { xs: 2, sm: 3 } }}>
       <Stack spacing={4}>
-        {/* --- Seção de Perfil --- */}
         <Box>
           <Typography variant="h5" gutterBottom>
             Perfil
@@ -51,7 +50,6 @@ export default function SettingsPage() {
 
         <Divider />
 
-        {/* --- Seção da Conta --- */}
         <Box>
           <Typography variant="h5" gutterBottom>
             Conta

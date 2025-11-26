@@ -41,6 +41,8 @@ export default function PopUpAddNewChat({ open, onClose} : PopUpProps){
                 from : auth.currentUser?.displayName,
                 fromId : auth.currentUser?.uid,
                 timestamp : serverTimestamp(),
+                fromAvatarUrl : auth.currentUser?.photoURL,
+                unread : true,
             })}catch(error){
                 console.log("Algo deu errado ao tentar enviar o pedido : " + error);
                 return;

@@ -1,0 +1,1 @@
+Quando se lida com componentes temporarios como o header do chatList, que nele contem pop ups que tambem são componentes ou seja, componentes dentro de componentes que são ativados pelo componente pai, temos que fazer algumas alterações importantes

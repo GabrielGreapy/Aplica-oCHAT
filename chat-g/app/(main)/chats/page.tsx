@@ -18,9 +18,9 @@ import {
   ListItemAvatar,
 } from '@mui/material';
 import { useChatInfo } from '@/context/ChatInfoContext';
+import ChatListHeader from '@/app/components/chatComponents/ChatListHeader';
 
-
-import ChatListHeader from '@/app/components/ChatListHeader'; 
+ 
 import { collection, onSnapshot, orderBy, query, where } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth, db } from '@/Firebase/FirebaseConfig';
@@ -36,10 +36,13 @@ interface Chat {
 }
 
 export default function ChatsPage() {
+    
     const { chatSelecionado, setChatSelecionado } = useChatInfo();
-    const [chats, setChats] = useState<Chat[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [currentUser, setCurrentUser] = useState(auth.currentUser);
+    const [ chats, setChats] = useState<Chat[]>([]);
+    const  [loading, setLoading] = useState(true);
+    const [ currentUser, setCurrentUser] = useState(auth.currentUser);
+
+
 
     useEffect(() => {
        
@@ -93,46 +96,48 @@ export default function ChatsPage() {
     }
 
     return (
-        <Box sx={{ bgcolor: 'background.paper', height: '100%', display: 'flex', flexDirection: 'column' }}>
-            
-            <ChatListHeader />
-            <Box sx={{ flexGrow: 1, overflowY: 'auto' }}>
-                <List sx={{ padding: 0 }}>
-                    {chats.map((chat) => (
-                        <React.Fragment key={chat.id}>
-                          {/* ... seu ListItem continua igual ... */}
-                          <ListItem disablePadding>
-                                <ListItemButton
-                                    sx={{ p: { xs: 1.5, sm: 2 } }}
-                                    onClick={() => setChatSelecionado({
-                                        id: chat.id,
-                                        name: chat.chatName, 
-                                        avatarUrl: chat.avatarUrl,
-                                    })}
+        
+            <Box sx={{ bgcolor: 'background.paper', height: '100%', display: 'flex', flexDirection: 'column' }}>
+                
+                <ChatListHeader />
+                <Box sx={{ flexGrow: 1, overflowY: 'auto' }}>
+                    
+                    <List sx={{ padding: 0 }}>
+                        {chats.map((chat) => (
+                            <React.Fragment key={chat.id}>
+                            
+                            <ListItem disablePadding>
+                                    <ListItemButton
+                                        sx={{ p: { xs: 1.5, sm: 2 } }}
+                                        onClick={() => setChatSelecionado({
+                                            id: chat.id,
+                                            name: chat.chatName, 
+                                            avatarUrl: chat.avatarUrl,
+                                        })}
 
-                                    selected={chatSelecionado?.id === chat.id}
-                                >
-                                    <ListItemAvatar>
-                                        <Badge color="primary" badgeContent={chat.unreadCount} invisible={!chat.unreadCount || chat.unreadCount === 0}>
-                                            <Avatar alt={chat.chatName} src={chat.avatarUrl} />
-                                        </Badge>
-                                    </ListItemAvatar>
-                                    <ListItemText
-                                        primary={chat.chatName}
-                                        secondary={chat.lastMessage}
-                                        primaryTypographyProps={{ fontWeight: '500' }}
-                                        secondaryTypographyProps={{ noWrap: true }}
-                                    />
-                                    <Typography variant="caption" color="text.secondary" sx={{ ml: 2, alignSelf: 'flex-start', pt: '4px' }}>
-                                        {chat.timestamp?.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
-                                    </Typography>
-                                </ListItemButton>
-                            </ListItem>
-                            <Divider variant="inset" component="li" />
-                        </React.Fragment>
-                    ))}
-                </List>
+                                        selected={chatSelecionado?.id === chat.id}
+                                    >
+                                        <ListItemAvatar>
+                                            <Badge color="primary" badgeContent={chat.unreadCount} invisible={!chat.unreadCount || chat.unreadCount === 0}>
+                                                <Avatar alt={chat.chatName} src={chat.avatarUrl} />
+                                            </Badge>
+                                        </ListItemAvatar>
+                                        <ListItemText
+                                            primary={chat.chatName}
+                                            secondary={chat.lastMessage}
+                                            primaryTypographyProps={{ fontWeight: '500' }}
+                                            secondaryTypographyProps={{ noWrap: true }}
+                                        />
+                                        <Typography variant="caption" color="text.secondary" sx={{ ml: 2, alignSelf: 'flex-start', pt: '4px' }}>
+                                            {chat.timestamp?.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+                                        </Typography>
+                                    </ListItemButton>
+                                </ListItem>
+                                <Divider variant="inset" component="li" />
+                            </React.Fragment>
+                        ))}
+                    </List>
+                </Box>
             </Box>
-        </Box>
     );
 };
