@@ -3,8 +3,8 @@
 import React, { useState} from 'react';
 import { Box, Typography, IconButton, Dialog, DialogTitle, DialogContent } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import ProfilePicture from '../profileComponents/profilePicture';
-import PopUpAddNewChat from '@/app/components/chatComponents/popUpAddNewChat'
+import ProfilePicture from '@/app/components/profileComponents/profilePicture';
+import PopUpAddNewChat from './popUpAddNewChat';
 import RequestsNotifications from './requestsNotifications';
 export default function ChatListHeader() {
   const [ open, setOpen] = useState(false)

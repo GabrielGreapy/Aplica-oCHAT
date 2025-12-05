@@ -7,8 +7,8 @@ import { addDoc, collection, doc, onSnapshot, orderBy, query, serverTimestamp } 
 import { useEffect, useRef, useState } from "react";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import SendIcon from '@mui/icons-material/Send';
+import { useRouter } from "next/router";
 
-import { timeStamp } from "console";
 
 interface Message {
     id : string;
@@ -16,7 +16,8 @@ interface Message {
     senderId : string;
     timestamp : any;
 }
-export default function ChatWindow(){
+export default function ChatWindow( { chatId} : { chatId: string}){
+    const router = useRouter();
     const { chatSelecionado, setChatSelecionado } = useChatInfo();
     const [ messages, setMessages] = useState<Message[]>([])
     const [ newMessage, setNewMessage] = useState("")
