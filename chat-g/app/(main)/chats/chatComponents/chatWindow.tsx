@@ -2,12 +2,12 @@
 
 import { useChatInfo } from "@/context/ChatInfoContext";
 import { db, auth } from "@/Firebase/FirebaseConfig";
-import { Avatar, Box, IconButton, Paper, TextField, Typography } from "@mui/material";
-import { addDoc, collection, doc, onSnapshot, orderBy, query, serverTimestamp } from "firebase/firestore";
+import { Avatar, Box, CircularProgress, IconButton, Paper, TextField, Typography } from "@mui/material";
+import { addDoc, collection, doc, getDoc, onSnapshot, orderBy, query, serverTimestamp } from "firebase/firestore";
 import { useEffect, useRef, useState } from "react";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import SendIcon from '@mui/icons-material/Send';
-import { useRouter } from "next/router";
+import { useRouter } from 'next/navigation';
 
 
 interface Message {
@@ -18,17 +18,52 @@ interface Message {
 }
 export default function ChatWindow( { chatId} : { chatId: string}){
     const router = useRouter();
-    const { chatSelecionado, setChatSelecionado } = useChatInfo();
+    
+
     const [ messages, setMessages] = useState<Message[]>([])
     const [ newMessage, setNewMessage] = useState("")
     const [ loading, setLoading] = useState(false)
 
+    const [headerData, setHeaderData] = useState({ name: "", avatarUrl : ""})
+
+    const scrolllToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth"})
+    }
+
     const messagesEndRef = useRef<HTMLDivElement>(null);
     
     useEffect(() => {
-        if (!chatSelecionado?.id) return;
+        const fetchChatHeader = async () => {
+            if(!chatId || !auth.currentUser) return;
+            try{
+                const chatDocRef = doc(db, 'chats', chatId)
+                const docSnap = await getDoc(chatDocRef)
+                if(docSnap.exists()){
+                    const data = docSnap.data()
+                    const usersList = data.usersId as string[]
+                    const otherUserId = usersList.find( id => id !== auth.currentUser?.uid)
+                    if( otherUserId && data.usersData && data.usersData[otherUserId]){
+                        const userData = data.usersData[otherUserId]
+                        setHeaderData({
+                            name : userData.displayName || "Usuario",
+                            avatarUrl: userData.photoUrl || ""
+                        })
+                    }
+                }
+            }catch(error){
+                console.error("Erro ao carregar topo do chat: ", error)
+            }
+        }
+        fetchChatHeader()
+    }, [chatId])
 
-        const messagesRef = collection(db, 'chats', chatSelecionado.id, 'messages')
+
+
+
+    useEffect(() => {
+        if (!chatId) return;
+
+        const messagesRef = collection(db, 'chats', chatId, 'messages')
         const q = query(messagesRef, orderBy('timestamp', 'asc'))
         const unsubscribe = onSnapshot(q, (snapshot) => {
             const loadedMessages = snapshot.docs.map(doc => ({
@@ -39,15 +74,29 @@ export default function ChatWindow( { chatId} : { chatId: string}){
             setLoading(false)
         })
         return () => unsubscribe();
-    }, [chatSelecionado?.id])
+    }, [chatId])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     const handleSendMessage = async () => {
-        if(!newMessage.trim() || !chatSelecionado?.id || !auth.currentUser) return;
+        if(!newMessage.trim() || !chatId || !auth.currentUser) return;
         try{
             const msgTemp = newMessage;
             setNewMessage("");
-            const messagesRef = collection(db, 'chats', chatSelecionado.id, 'messages')
-            await addDoc(collection(db, 'chats', chatSelecionado.id, 'messages'), {
+            const messagesRef = collection(db, 'chats', chatId, 'messages')
+            await addDoc(collection(db, 'chats', chatId, 'messages'), {
                 text : msgTemp,
                 senderId: auth.currentUser.uid,
                 timestamp : serverTimestamp()
@@ -56,37 +105,37 @@ export default function ChatWindow( { chatId} : { chatId: string}){
             console.error("Erro ao enviar mensagem: " , error)
         }
     }
-    if (!chatSelecionado) return null;
+    if (!chatId) return null;
     
 
     return(
         <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%', bgcolor: '#efe7dd' }}>
             
-            {/* --- HEADER --- */}
+            
             <Paper square sx={{ p: 1, display: 'flex', alignItems: 'center', bgcolor: '#f0f2f5' }}>
-                <IconButton onClick={() => setChatSelecionado(null)} sx={{ mr: 1 }}>
+                <IconButton onClick={() => router.push('/chats')} sx={{ mr: 1 }}>
                     <ArrowBackIcon />
                 </IconButton>
 
-                <Avatar src={chatSelecionado.avatarUrl} />
+                <Avatar src={headerData.avatarUrl} alt={headerData.name} />
                 <Typography variant="subtitle1" sx={{ ml: 2, fontWeight: 'bold', flexGrow: 1 }}>
-                    {chatSelecionado.name}
+                    {headerData.name || "Carregando..."}
                 </Typography>
             </Paper>
 
-            {/* --- AREA DE MENSAGENS --- */}
+           
             <Box sx={{ flex: 1, overflowY: 'auto', p: 2, display: 'flex', flexDirection: 'column', gap: 1 }}>
                 
-                {/* Loading opcional */}
+               
                 {loading && <Box sx={{display:'flex', justifyContent:'center'}}><CircularProgress /></Box>}
 
-                {/* Map das mensagens */}
+                
                 {messages.map((msg) => {
                     const isMe = msg.senderId === auth.currentUser?.uid;
                     return (
                         <Box key={msg.id} sx={{
                             alignSelf: isMe ? 'flex-end' : 'flex-start',
-                            bgcolor: isMe ? '#d9fdd3' : '#ffffff', // Verde pra mim, branco pro outro
+                            bgcolor: isMe ? '#d9fdd3' : '#ffffff',
                             p: 1.5,
                             borderRadius: 2,
                             maxWidth: '70%',
@@ -100,7 +149,7 @@ export default function ChatWindow( { chatId} : { chatId: string}){
                         </Box>
                     )
                 })}
-                {/* Elemento invisível */}
+                
                 <div ref={messagesEndRef} />
             </Box>
 

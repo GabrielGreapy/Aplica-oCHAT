@@ -35,17 +35,18 @@ interface Chats {
   timestamp?: Date;
 }
 
-export default function ChatSidebar() {
+export default function SidebarList() {
     const router = useRouter(); 
     const params = useParams();
-    const { chatSelecionado, setChatSelecionado } = useChatInfo();
+    const activeChatId = params?.id as string;
+    
     const [ chats, setChats] = useState<Chats[]>([]);
     const  [loading, setLoading] = useState(true);
     const [ user, setUser] = useState<User | null>(auth.currentUser)
     
     useEffect(() => {
         
-        const unsubscribeAut = onAuthStateChanged(auth, (currentUser) => {
+        const unsubscribeAuth = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser)
             if(!currentUser){
                 setLoading(false)
@@ -69,7 +70,7 @@ export default function ChatSidebar() {
                 const data = doc.data();
 
                 const otherUserId = data.usersId.find((id : string) => id !== user.uid);
-                const otherUserData = data.usersData[otherUserId];
+                const otherUserData = otherUserId? data.usersData[otherUserId] : null;
 
                 return{
                     id: doc.id,
@@ -87,7 +88,7 @@ export default function ChatSidebar() {
             console.error("Erro ao buscar chats: " , error)
         })
         return () => unsubscribe();
-    }, [auth.currentUser])
+    }, [user])
 
 
 
@@ -122,8 +123,8 @@ export default function ChatSidebar() {
                                     <ListItemButton
                                         sx={{ p: { xs: 1.5, sm: 2 } }}
                                     
-                                        selected={params?.id === chat.id}
-                                        onClick= {() => router.push(`chats/${chat.id}`)}
+                                        selected={activeChatId === chat.id}
+                                        onClick= {() => router.push(`/chats/` + chat.id)}
                                         
                                     >
                                         <ListItemAvatar>

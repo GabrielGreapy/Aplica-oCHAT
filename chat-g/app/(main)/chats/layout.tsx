@@ -2,7 +2,7 @@
 
 import { Box } from "@mui/material";
 import { useParams } from "next/navigation"
-import ChatSidebar from "@/app/(main)/chats/chatComponents/chatSideBar"
+import SidebarList from "./chatComponents/SideBarList";
 
 
 
@@ -15,9 +15,10 @@ export default function ChatsLayout({ children } : {children: React.ReactNode}) 
             <Box sx={{ 
                 width: { xs: '100%', md: '350px' }, 
                 
-                display: { xs: isChatOpen ? 'none' : 'block', md: 'block' } 
+                display: { xs: isChatOpen ? 'none' : 'block', md: 'block' } ,
+                borderRight: '1px solid #ddd'
             }}>
-                <ChatSidebar />
+                <SidebarList />
             </Box>
             <Box sx={{ 
                 flex: 1, 
