@@ -2,8 +2,8 @@
 
 import { db, auth } from "@/Firebase/FirebaseConfig";
 import { Avatar, Box, CircularProgress, IconButton, Paper, TextField, Typography } from "@mui/material";
-import { addDoc, collection, doc, getDoc, onSnapshot, orderBy, query, serverTimestamp } from "firebase/firestore";
-import { useEffect, useRef, useState } from "react";
+import { addDoc, collection, doc, getDoc, onSnapshot, orderBy, query, serverTimestamp, limitToLast } from "firebase/firestore";
+import { useEffect, useRef, useState, useLayoutEffect } from "react";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import SendIcon from '@mui/icons-material/Send';
 import { useRouter } from 'next/navigation';
@@ -16,6 +16,10 @@ interface Message {
     timestamp : any;
 }
 export default function ChatWindow( { chatId} : { chatId: string}){
+
+    const[msgLimit, setMsgLimit] = useState(30);
+    const[lastScrollHeight, setLastScrollHeight] = useState(0);
+    const scrollContainer = useRef<HTMLDivElement>(null);
     const router = useRouter();
     
 
@@ -31,6 +35,14 @@ export default function ChatWindow( { chatId} : { chatId: string}){
 
     const messagesEndRef = useRef<HTMLDivElement>(null);
     
+
+    useEffect(() => {
+
+        setMsgLimit(30);
+    }, [chatId]);
+
+
+
     useEffect(() => {
         const fetchChatHeader = async () => {
             if(!chatId || !auth.currentUser) return;
@@ -62,8 +74,11 @@ export default function ChatWindow( { chatId} : { chatId: string}){
     useEffect(() => {
         if (!chatId) return;
 
+        if(msgLimit === 30) setLoading(true);
+
+
         const messagesRef = collection(db, 'chats', chatId, 'messages')
-        const q = query(messagesRef, orderBy('timestamp', 'asc'))
+        const q = query(messagesRef, orderBy('timestamp', 'asc'),  limitToLast(msgLimit))
         const unsubscribe = onSnapshot(q, (snapshot) => {
             const loadedMessages = snapshot.docs.map(doc => ({
                 id : doc.id,
@@ -71,21 +86,32 @@ export default function ChatWindow( { chatId} : { chatId: string}){
             } as Message))
             setMessages(loadedMessages)
             setLoading(false)
+            if(msgLimit === 30){
+                setTimeout( scrolllToBottom, 300)
+            }
         })
         return () => unsubscribe();
-    }, [chatId])
+    }, [chatId, msgLimit])
 
 
+    useLayoutEffect(() =>{
+        if(lastScrollHeight > 0 && scrollContainer.current){
+            const diff = scrollContainer.current.scrollHeight - lastScrollHeight
+            if(diff > 0){
+                scrollContainer.current.scrollTop = diff;
+                setLastScrollHeight(0);
+            }
+        }
+    }, [messages, lastScrollHeight])
 
 
-
-
-
-
-
-
-
-
+    const handleScroll = (e : React.UIEvent<HTMLDivElement>) => {
+        const target = e.currentTarget
+        if(target.scrollTop === 0 && !loading && messages.length >= msgLimit){
+            setLastScrollHeight(target.scrollHeight)
+            setMsgLimit((prev) => prev + 30)
+        }
+    }
 
 
 
@@ -123,7 +149,10 @@ export default function ChatWindow( { chatId} : { chatId: string}){
             </Paper>
 
            
-            <Box sx={{ flex: 1, overflowY: 'auto', p: 2, display: 'flex', flexDirection: 'column', gap: 1 }}>
+            <Box sx={{ flex: 1, overflowY: 'auto', p: 2, display: 'flex', flexDirection: 'column', gap: 1 }}
+                ref={scrollContainer}
+                onScroll={handleScroll}
+            >
                 
                
                 {loading && <Box sx={{display:'flex', justifyContent:'center'}}><CircularProgress /></Box>}

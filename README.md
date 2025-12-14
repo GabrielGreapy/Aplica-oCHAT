@@ -8,10 +8,11 @@ Funções Disponiveis:
     Conversae com pessoas por meio de ticket.
     Ticket criado automaticamente.
     Login mantido por 6 dias mesmo saindo do site e fechando-o.
+    Limite de mensagens de 30 ao entrar mas ao ir subindo tem scroll infinito
     Sair da conta.
 
 Funções aa se adicionar:
-    Limite de mensagens de 30 vistas por vez.
+    
     Possibilidade de enviar images/documentos/arquivos/videos
     Tema claro e escuro
 
