@@ -1,16 +1,25 @@
 # Aplica-oCHAT
 Uma aplicação de chat entre pessoas com NextJS.
 A premissa dessa aplicação web é permitir que pessoas se conversem por meio de tickets que cada perfil tem.
-    Como funciona? você primeiro dá login e isto criará sua conta caso não tenha logado antes. após de ter o seu ticket criado com sua conta, compartilhe-o ou receba o ticket de alguem e adicione essa pessoa a lista de chats.
+    Como funciona? você primeiro dá login e isto criará sua conta caso não tenha logado antes. após ter criado um ticket seu será criado na sua conta (Abra a aba das configurações para ve-lo), compartilhe-o ou receba o ticket de alguem e adicione essa pessoa a lista de chats na aba de chats.
 
-Funções:
+Funções Disponiveis:
     Adicionar pessoas.
     Conversae com pessoas por meio de ticket.
     Ticket criado automaticamente.
     Login mantido por 6 dias mesmo saindo do site e fechando-o.
     Sair da conta.
 
+Funções aa se adicionar:
+    Limite de mensagens de 30 vistas por vez.
+    Possibilidade de enviar images/documentos/arquivos/videos
+    Tema claro e escuro
+
+
 Ao login a aplicação é informada de algumas informações como e-mail, foto de perfil, nome de usuario. Importante para criação de uma conta na aplicação.
 
-Cada arquivo que eu julgar importante terá informações sobre ele com README.md na pasta deles, pode olhar.
-Firestore para utiliza-lo precisamos ajustar as regras de acesso e permisso~es da Database, configurando elas será melhor para evitar erros.
+Cada arquivo que eu julgar importante terá informações sobre ele com README.md na pasta deles, pode olhar se quiser dar uma estudada.
+
+
+Lembretes
+    Firestore para utiliza-lo precisamos ajustar as regras de acesso e permisso~es da Database, configurando elas será melhor para evitar erros.
