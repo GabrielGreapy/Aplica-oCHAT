@@ -1,6 +1,5 @@
 'use client'
 
-import { useChatInfo } from "@/context/ChatInfoContext";
 import { db, auth } from "@/Firebase/FirebaseConfig";
 import { Avatar, Box, CircularProgress, IconButton, Paper, TextField, Typography } from "@mui/material";
 import { addDoc, collection, doc, getDoc, onSnapshot, orderBy, query, serverTimestamp } from "firebase/firestore";
