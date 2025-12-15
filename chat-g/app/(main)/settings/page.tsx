@@ -17,6 +17,7 @@ import LogoffButton from '@/app/components/button-logoff';
 import ProfileUserName from '@/app/components/profileComponents/profileUserName';
 import ProfileEmail from '@/app/components/profileComponents/profileEmail';
 import ProfileTicket from '@/app/components/profileComponents/profileTicket';
+import ThemeToggle from '@/app/components/themeToggle';
 export default function SettingsPage() {
  
 
@@ -45,9 +46,11 @@ export default function SettingsPage() {
           <Typography variant="h5" gutterBottom>
             Preferências
           </Typography>
-        
+          
         </Box>
-
+        <Box>
+          <ThemeToggle />
+        </Box>
         <Divider />
 
         <Box>
