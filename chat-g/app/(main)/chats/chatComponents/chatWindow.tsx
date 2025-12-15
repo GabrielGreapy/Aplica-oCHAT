@@ -151,7 +151,9 @@ export default function ChatWindow( { chatId} : { chatId: string}){
            
             <Box sx={{ flex: 1, overflowY: 'auto', p: 2, display: 'flex', flexDirection: 'column', gap: 1 }}
                 ref={scrollContainer}
-                onScroll={handleScroll}
+                onScroll={handleScroll
+                       
+                }
             >
                 
                
