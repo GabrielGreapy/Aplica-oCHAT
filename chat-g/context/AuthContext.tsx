@@ -4,8 +4,14 @@ import { createContext, useEffect, useState } from "react";
 import { auth } from "../Firebase/FirebaseConfig";
 import { onAuthStateChanged, User } from "firebase/auth";
 
-
-export const AuthContext = createContext<User | null>(null)
+interface AuthContextType{
+  user: User | null;
+  loading: boolean;
+}
+export const AuthContext = createContext<AuthContextType>({
+  user: null,
+  loading: true,
+})
 
 
 export const AuthContextProvider = ({children}: {children : React.ReactNode}) => {
@@ -26,12 +32,8 @@ export const AuthContextProvider = ({children}: {children : React.ReactNode}) =>
   
 
   return(
-    <AuthContext.Provider value={user}>
-      { loading? 
-        <div>
-          Carregando...
-        </div>  : children
-      }
+    <AuthContext.Provider value={{user, loading}}>
+        {children}
     </AuthContext.Provider>
   )
 
