@@ -1,7 +1,7 @@
 'use client'
 
 import { db, auth } from "@/Firebase/FirebaseConfig";
-import { Avatar, Box, CircularProgress, IconButton, Paper, TextField, Typography } from "@mui/material";
+import { Avatar, Box, CircularProgress, IconButton, Paper, TextField, Typography, useTheme } from "@mui/material";
 import { addDoc, collection, doc, getDoc, onSnapshot, orderBy, query, serverTimestamp, limitToLast } from "firebase/firestore";
 import { useEffect, useRef, useState, useLayoutEffect } from "react";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -16,7 +16,7 @@ interface Message {
     timestamp : any;
 }
 export default function ChatWindow( { chatId} : { chatId: string}){
-
+    const theme = useTheme()
     const[msgLimit, setMsgLimit] = useState(30);
     const[lastScrollHeight, setLastScrollHeight] = useState(0);
     const scrollContainer = useRef<HTMLDivElement>(null);
@@ -134,10 +134,18 @@ export default function ChatWindow( { chatId} : { chatId: string}){
     
 
     return(
-        <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%', bgcolor: '#efe7dd' }}>
+        <Box sx={{ display: 'flex',
+        flexDirection: 'column',
+        height: '100%', 
+        bgcolor: theme.palette.chat.main,
+        transition: 'background-color 0.3ss ease'
+        }}>
             
             
-            <Paper square sx={{ p: 1, display: 'flex', alignItems: 'center', bgcolor: '#f0f2f5' }}>
+            <Paper square sx={{ p: 1, display: 'flex',
+                alignItems: 'center', 
+                bgcolor: theme.palette.background.default
+                }}>
                 <IconButton onClick={() => router.push('/chats')} sx={{ mr: 1 }}>
                     <ArrowBackIcon />
                 </IconButton>
@@ -165,8 +173,9 @@ export default function ChatWindow( { chatId} : { chatId: string}){
                     return (
                         <Box key={msg.id} sx={{
                             alignSelf: isMe ? 'flex-end' : 'flex-start',
-                            bgcolor: isMe ? '#d9fdd3' : '#ffffff',
+                            bgcolor: isMe ? theme.palette.chat.bubbleMe : theme.palette.chat.bubbleOther,
                             p: 1.5,
+                            color: theme.palette.chat.textPrimary, 
                             borderRadius: 2,
                             maxWidth: '70%',
                             boxShadow: 1
