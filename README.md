@@ -25,3 +25,5 @@ Cada arquivo que eu julgar importante terá informações sobre ele com README.m
 
 Lembretes
     Firestore para utiliza-lo precisamos ajustar as regras de acesso e permisso~es da Database, configurando elas será melhor para evitar erros.
+    Eu utilizei um adaptador do materialUi para evitar erros de hidratação, ele vai envelopar lá no layout.
+    npm install @mui/material-nextjs
