@@ -14,6 +14,7 @@ interface Message {
     text : string;
     senderId : string;
     timestamp : any;
+    sawMessage: any;
 }
 export default function ChatWindow( { chatId} : { chatId: string}){
     const theme = useTheme()
@@ -124,11 +125,13 @@ export default function ChatWindow( { chatId} : { chatId: string}){
             await addDoc(collection(db, 'chats', chatId, 'messages'), {
                 text : msgTemp,
                 senderId: auth.currentUser.uid,
-                timestamp : serverTimestamp()
+                timestamp : serverTimestamp(),
+                sawMessage : false,
             } )
             const chatRef = doc(db, 'chats', chatId)
             await updateDoc(chatRef, { 
-                lastMessage : msgTemp
+                lastMessage : msgTemp,
+                timestamp : serverTimestamp(),
             })
         }catch(error){
             console.error("Erro ao enviar mensagem: " , error)
