@@ -2,7 +2,7 @@
 
 import { db, auth } from "@/Firebase/FirebaseConfig";
 import { Avatar, Box, CircularProgress, IconButton, Paper, TextField, Typography, useTheme } from "@mui/material";
-import { addDoc, collection, doc, getDoc, onSnapshot, orderBy, query, serverTimestamp, limitToLast } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, onSnapshot, orderBy, query, serverTimestamp, limitToLast, setDoc, updateDoc } from "firebase/firestore";
 import { useEffect, useRef, useState, useLayoutEffect } from "react";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import SendIcon from '@mui/icons-material/Send';
@@ -126,6 +126,10 @@ export default function ChatWindow( { chatId} : { chatId: string}){
                 senderId: auth.currentUser.uid,
                 timestamp : serverTimestamp()
             } )
+            const chatRef = doc(db, 'chats', chatId)
+            await updateDoc(chatRef, { 
+                lastMessage : msgTemp
+            })
         }catch(error){
             console.error("Erro ao enviar mensagem: " , error)
         }
