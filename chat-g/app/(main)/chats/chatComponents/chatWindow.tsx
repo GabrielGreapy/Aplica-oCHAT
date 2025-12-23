@@ -14,7 +14,7 @@ interface Message {
     text : string;
     senderId : string;
     timestamp : any;
-    sawMessage: any;
+    unread: boolean;
 }
 export default function ChatWindow( { chatId} : { chatId: string}){
     const theme = useTheme()
@@ -127,6 +127,7 @@ export default function ChatWindow( { chatId} : { chatId: string}){
                 senderId: auth.currentUser.uid,
                 timestamp : serverTimestamp(),
                 sawMessage : false,
+                unread : true,
             } )
             const chatRef = doc(db, 'chats', chatId)
             await updateDoc(chatRef, { 
