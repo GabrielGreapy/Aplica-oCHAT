@@ -70,14 +70,16 @@ export default function SidebarList() {
                 const data = doc.data();
 
                 const otherUserId = data.usersId.find((id : string) => id !== user.uid);
-                const otherUserData = otherUserId? data.usersData[otherUserId] : null;
-
+                const otherUserData = otherUserId && data.usersData ? data.usersData[otherUserId] : null;
+                const myData = data.usersData ? data.usersData[user.uid] : null;
+                
+                const count = myData?.unreadCount || 0;
                 return{
                     id: doc.id,
                     chatName : otherUserData?.displayName || "Usuario desconhecido",
                     avatarUrl : otherUserData?.photoUrl || "",
                     lastMessage : data.lastMessage,
-                    unreadCount : 0,
+                    unreadCount : count,
                     timestamp : data.timestamp?.toDate(),
                 }
             })
@@ -89,7 +91,6 @@ export default function SidebarList() {
         })
         return () => unsubscribe();
     }, [user])
-
 
 
     

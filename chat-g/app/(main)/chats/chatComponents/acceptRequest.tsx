@@ -25,16 +25,19 @@ export default function AcceptRequest({ requestId, currentUser, requestSender} :
                 usersData : {
                     [currentUser.uid] : {
                         displayName : currentUser.displayName,
-                        photoUrl : currentUser.photoURL
+                        photoUrl : currentUser.photoURL,
+                        UnreadCount : 0
                     },
                     [requestSender.uid] : {
                         displayName : requestSender.name,
-                        photoUrl : requestSender.avatarUrl || null
+                        photoUrl : requestSender.avatarUrl || null,
+                        UnreadCount : 0
                     },
                     
                 },
                 lastMessage : "Chat iniciado",
                 timestamp : serverTimestamp()
+
 
             }
         )

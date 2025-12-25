@@ -2,7 +2,7 @@
 
 import { db, auth } from "@/Firebase/FirebaseConfig";
 import { Avatar, Box, CircularProgress, IconButton, Paper, TextField, Typography, useTheme } from "@mui/material";
-import { addDoc, collection, doc, getDoc, onSnapshot, orderBy, query, serverTimestamp, limitToLast, setDoc, updateDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, onSnapshot, orderBy, query, serverTimestamp, limitToLast, setDoc, updateDoc, increment } from "firebase/firestore";
 import { useEffect, useRef, useState, useLayoutEffect } from "react";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import SendIcon from '@mui/icons-material/Send';
@@ -14,9 +14,10 @@ interface Message {
     text : string;
     senderId : string;
     timestamp : any;
-    unread: boolean;
+
 }
 export default function ChatWindow( { chatId} : { chatId: string}){
+    const [receiverId , SetReceiverId] = useState<string | undefined>()
     const theme = useTheme()
     const[msgLimit, setMsgLimit] = useState(30);
     const[lastScrollHeight, setLastScrollHeight] = useState(0);
@@ -54,18 +55,31 @@ export default function ChatWindow( { chatId} : { chatId: string}){
                     const data = docSnap.data()
                     const usersList = data.usersId as string[]
                     const otherUserId = usersList.find( id => id !== auth.currentUser?.uid)
+
                     if( otherUserId && data.usersData && data.usersData[otherUserId]){
+                        SetReceiverId(otherUserId)
                         const userData = data.usersData[otherUserId]
                         setHeaderData({
                             name : userData.displayName || "Usuario",
                             avatarUrl: userData.photoUrl || ""
                         })
                     }
+                    const myId = auth.currentUser.uid;
+                    if(data.usersData && data.usersData[myId]){
+                        const myUnreadCount = data.usersData[myId].unreadCount;
+                        if (myUnreadCount > 0){
+                            await updateDoc(chatDocRef,{
+                                [`usersData.${myId}.unreadCount`] : 0
+                            })
+                            console.log("Contador zerado!");
+                        }
+                    }
                 }
             }catch(error){
                 console.error("Erro ao carregar topo do chat: ", error)
             }
         }
+        
         fetchChatHeader()
     }, [chatId])
 
@@ -117,22 +131,21 @@ export default function ChatWindow( { chatId} : { chatId: string}){
 
 
     const handleSendMessage = async () => {
-        if(!newMessage.trim() || !chatId || !auth.currentUser) return;
+        if(!newMessage.trim() || !chatId || !auth.currentUser || !receiverId) return;
         try{
             const msgTemp = newMessage;
             setNewMessage("");
-            const messagesRef = collection(db, 'chats', chatId, 'messages')
             await addDoc(collection(db, 'chats', chatId, 'messages'), {
                 text : msgTemp,
                 senderId: auth.currentUser.uid,
                 timestamp : serverTimestamp(),
-                sawMessage : false,
-                unread : true,
             } )
             const chatRef = doc(db, 'chats', chatId)
+            
             await updateDoc(chatRef, { 
                 lastMessage : msgTemp,
                 timestamp : serverTimestamp(),
+                [`usersData.${receiverId}.unreadCount`] : increment(1),
             })
         }catch(error){
             console.error("Erro ao enviar mensagem: " , error)
@@ -146,7 +159,7 @@ export default function ChatWindow( { chatId} : { chatId: string}){
         flexDirection: 'column',
         height: '100%', 
         bgcolor: theme.palette.chat.main,
-        transition: 'background-color 0.3ss ease'
+        transition: 'background-color 0.3s ease'
         }}>
             
             
