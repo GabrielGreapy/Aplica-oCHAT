@@ -1,6 +1,7 @@
 "use client";
 
 import { AuthContextProvider } from "@/context/AuthContext";
+import { NotificationContextProvider } from "@/context/NotificationContext";
 import { ThemeContextProvider } from "@/context/ThemeContext";
 import React from "react";
 
@@ -8,9 +9,9 @@ export function Providers({ children} : {children : React.ReactNode}){
     return(
         <ThemeContextProvider>
             <AuthContextProvider>
-        
-                {children}
-        
+                <NotificationContextProvider>
+                    {children}
+                </NotificationContextProvider>
             </AuthContextProvider>
         </ThemeContextProvider>
     )
