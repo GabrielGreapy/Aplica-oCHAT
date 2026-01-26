@@ -1,13 +1,13 @@
 'use client'
 
 import { db, auth } from "@/Firebase/FirebaseConfig";
-import { Avatar, Box, CircularProgress, IconButton, Paper, TextField, Typography, useTheme } from "@mui/material";
+import { Avatar, Box, CircularProgress, IconButton, Paper, TextField, Typography, useTheme, Drawer } from "@mui/material";
 import { addDoc, collection, doc, getDoc, onSnapshot, orderBy, query, serverTimestamp, limitToLast, setDoc, updateDoc, increment } from "firebase/firestore";
 import { useEffect, useRef, useState, useLayoutEffect } from "react";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import SendIcon from '@mui/icons-material/Send';
 import { useRouter } from 'next/navigation';
-
+import ChatInfoSideBar from "./ChatInfoSideBar";
 
 interface Message {
     id : string;
@@ -23,6 +23,8 @@ export default function ChatWindow( { chatId} : { chatId: string}){
     const[lastScrollHeight, setLastScrollHeight] = useState(0);
     const scrollContainer = useRef<HTMLDivElement>(null);
     const router = useRouter();
+
+    const [isInfoOpen, setIsInfoOpen] = useState(false);
     
 
     const [ messages, setMessages] = useState<Message[]>([])
@@ -164,10 +166,17 @@ export default function ChatWindow( { chatId} : { chatId: string}){
             
             
             <Paper square sx={{ p: 1, display: 'flex',
+                
                 alignItems: 'center', 
-                bgcolor: theme.palette.background.default
-                }}>
-                <IconButton onClick={() => router.push('/chats')} sx={{ mr: 1 }}>
+                bgcolor: theme.palette.background.default,
+                cursor: 'pointer'
+                }}
+                onClick={() => setIsInfoOpen(true)}
+                >
+                <IconButton onClick={(e) => {
+                    e.stopPropagation();
+                    router.push('/chats');
+                    }} sx={{ mr: 1 }}>
                     <ArrowBackIcon />
                 </IconButton>
 
@@ -227,6 +236,21 @@ export default function ChatWindow( { chatId} : { chatId: string}){
                     <SendIcon />
                 </IconButton>
             </Paper>
+            <Drawer
+                anchor="right"
+                open={isInfoOpen}
+                onClose={() => setIsInfoOpen(false)}
+                variant="temporary" 
+                ModalProps={{
+                    keepMounted: true,
+                }}
+            >
+                
+                <ChatInfoSideBar 
+                    userData={headerData} 
+                    onClose={() => setIsInfoOpen(false)} 
+                />
+            </Drawer>
         </Box>
     )
 }

@@ -1,0 +1,74 @@
+'use client'
+
+import { Box, IconButton, Typography, Avatar, Divider, List, ListItem, ListItemText, ListItemIcon, Switch } from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
+import BlockIcon from '@mui/icons-material/Block';
+import DeleteIcon from '@mui/icons-material/Delete';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+interface ChatInfoSideBarProps{
+    userData : {
+        name : string;
+        avatarUrl : string;
+    };
+    onClose : () => void;
+}
+export default function ChatInfoSideBar({ userData, onClose} : ChatInfoSideBarProps){
+    return(
+        <Box sx={{ width: 350, height: '100%', display: 'flex', flexDirection: 'column', bgcolor: 'background.paper' }}>
+            
+            
+            <Box sx={{ p: 2, display: 'flex', alignItems: 'center', borderBottom: '1px solid rgba(0,0,0,0.12)' }}>
+                <IconButton onClick={onClose} sx={{ mr: 1 }}>
+                    <CloseIcon />
+                </IconButton>
+                <Typography variant="h6">Dados do contato</Typography>
+            </Box>
+<Box sx={{ overflowY: 'auto', flex: 1 }}>
+                
+                
+                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', p: 4, bgcolor: 'background.default', mb: 1 }}>
+                    <Avatar 
+                        src={userData.avatarUrl} 
+                        sx={{ width: 200, height: 200, mb: 2, fontSize: 80 }}
+                    />
+                    <Typography variant="h5" align="center">{userData.name}</Typography>
+                    <Typography variant="body2" color="text.secondary">+55 83 9999-9999</Typography>
+                </Box>
+
+               
+                <List sx={{ bgcolor: 'background.paper' }}>
+                    <ListItem>
+                        <Typography variant="body2" color="text.secondary">Mídia, links e docs</Typography>
+                    </ListItem>
+                  
+                    <Box sx={{ p: 2, display: 'flex', gap: 1 }}>
+                        <Box sx={{ width: 70, height: 70, bgcolor: '#ccc', borderRadius: 1 }} />
+                        <Box sx={{ width: 70, height: 70, bgcolor: '#ccc', borderRadius: 1 }} />
+                        <Box sx={{ width: 70, height: 70, bgcolor: '#ccc', borderRadius: 1 }} />
+                    </Box>
+
+                    <Divider />
+
+                    <ListItem>
+                        <ListItemIcon><NotificationsIcon /></ListItemIcon>
+                        <ListItemText primary="Silenciar notificações" />
+                        <Switch />
+                    </ListItem>
+
+                    <Divider />
+
+                    <ListItem button sx={{ color: 'error.main' }}>
+                        <ListItemIcon sx={{ color: 'error.main' }}><BlockIcon /></ListItemIcon>
+                        <ListItemText primary={`Bloquear ${userData.name}`} />
+                    </ListItem>
+
+                    <ListItem button sx={{ color: 'error.main' }}>
+                        <ListItemIcon sx={{ color: 'error.main' }}><DeleteIcon /></ListItemIcon>
+                        <ListItemText primary="Apagar conversa" />
+                    </ListItem>
+                </List>
+            </Box>
+        </Box>
+
+    )
+}
