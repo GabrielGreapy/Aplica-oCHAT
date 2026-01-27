@@ -31,7 +31,7 @@ export default function ChatWindow( { chatId} : { chatId: string}){
     const [ newMessage, setNewMessage] = useState("")
     const [ loading, setLoading] = useState(false)
 
-    const [headerData, setHeaderData] = useState({ name: "", avatarUrl : ""})
+    const [headerData, setHeaderData] = useState({ name: "", avatarUrl : "", id : "", chatId : ""})
 
     const scrolllToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth"})
@@ -63,7 +63,9 @@ export default function ChatWindow( { chatId} : { chatId: string}){
                         const userData = data.usersData[otherUserId]
                         setHeaderData({
                             name : userData.displayName || "Usuario",
-                            avatarUrl: userData.photoUrl || ""
+                            avatarUrl: userData.photoUrl || "",
+                            id : otherUserId,
+                            chatId : data.uid,
                         })
                     }
                     const myId = auth.currentUser.uid;

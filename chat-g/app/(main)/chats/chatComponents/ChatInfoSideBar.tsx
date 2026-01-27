@@ -5,14 +5,37 @@ import CloseIcon from '@mui/icons-material/Close';
 import BlockIcon from '@mui/icons-material/Block';
 import DeleteIcon from '@mui/icons-material/Delete';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import { useEffect, useState } from "react";
+import { collection, doc, getDoc } from "firebase/firestore";
+import { db } from "@/Firebase/FirebaseConfig";
 interface ChatInfoSideBarProps{
     userData : {
         name : string;
         avatarUrl : string;
+        id : string;
+        chatId : string;
     };
     onClose : () => void;
 }
 export default function ChatInfoSideBar({ userData, onClose} : ChatInfoSideBarProps){
+    const [userHeaderInfo,  setUserHeaderInfo] = useState({})
+    useEffect(() => {
+        const fetchUserHeaderInfo = async () => {
+            try{
+                const userRef = doc(db, 'users', userData.id)
+                const docSnap = await getDoc(userRef)
+                if((docSnap).exists()){
+                    const data = docSnap.data()
+                    setUserHeaderInfo(data)
+                }
+            } catch(error){
+                console.log("Deu erro: " + error)
+            }
+        }
+        fetchUserHeaderInfo()
+    }, [userData.id])
+
+
     return(
         <Box sx={{ width: 350, height: '100%', display: 'flex', flexDirection: 'column', bgcolor: 'background.paper' }}>
             
