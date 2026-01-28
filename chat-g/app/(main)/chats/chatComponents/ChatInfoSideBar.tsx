@@ -1,12 +1,13 @@
 'use client'
 
-import { Box, IconButton, Typography, Avatar, Divider, List, ListItem, ListItemText, ListItemIcon, Switch } from "@mui/material";
+import { Box, IconButton, Typography, Avatar, Divider, List, ListItem, ListItemText, ListItemButton, ListItemIcon, Switch } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import BlockIcon from '@mui/icons-material/Block';
 import DeleteIcon from '@mui/icons-material/Delete';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { useEffect, useState } from "react";
-import { collection, doc, getDoc } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDoc } from "firebase/firestore";
+import { useRouter } from "next/navigation";
 import { db } from "@/Firebase/FirebaseConfig";
 interface ChatInfoSideBarProps{
     userData : {
@@ -19,7 +20,12 @@ interface ChatInfoSideBarProps{
 }
 export default function ChatInfoSideBar({ userData, onClose} : ChatInfoSideBarProps){
     const [userHeaderInfo,  setUserHeaderInfo] = useState({})
+    const router = useRouter();
+    
+
+
     useEffect(() => {
+        if(!userData?.id) return;
         const fetchUserHeaderInfo = async () => {
             try{
                 const userRef = doc(db, 'users', userData.id)
@@ -29,13 +35,21 @@ export default function ChatInfoSideBar({ userData, onClose} : ChatInfoSideBarPr
                     setUserHeaderInfo(data)
                 }
             } catch(error){
-                console.log("Deu erro: " + error)
+                console.log("Deu erro tentando conseguir a info do usuário: " + error)
             }
         }
         fetchUserHeaderInfo()
     }, [userData.id])
 
-
+    const handleDeleteChat = async () => {
+        if(!userData.chatId) return;
+        try{
+            await deleteDoc(doc(db, 'chats', userData.chatId));
+            router.push("/chats");
+        }catch(error){
+            console.log("Deu erro excluindo o chat: " + error )
+        }
+    }
     return(
         <Box sx={{ width: 350, height: '100%', display: 'flex', flexDirection: 'column', bgcolor: 'background.paper' }}>
             
@@ -55,7 +69,8 @@ export default function ChatInfoSideBar({ userData, onClose} : ChatInfoSideBarPr
                         sx={{ width: 200, height: 200, mb: 2, fontSize: 80 }}
                     />
                     <Typography variant="h5" align="center">{userData.name}</Typography>
-                    <Typography variant="body2" color="text.secondary">+55 83 9999-9999</Typography>
+                    <Typography variant="body2" color="text.secondary">Código:{userData.id}</Typography>
+                    
                 </Box>
 
                
@@ -72,22 +87,19 @@ export default function ChatInfoSideBar({ userData, onClose} : ChatInfoSideBarPr
 
                     <Divider />
 
-                    <ListItem>
-                        <ListItemIcon><NotificationsIcon /></ListItemIcon>
-                        <ListItemText primary="Silenciar notificações" />
-                        <Switch />
-                    </ListItem>
+                   
 
                     <Divider />
 
-                    <ListItem button sx={{ color: 'error.main' }}>
-                        <ListItemIcon sx={{ color: 'error.main' }}><BlockIcon /></ListItemIcon>
-                        <ListItemText primary={`Bloquear ${userData.name}`} />
-                    </ListItem>
+                   
 
-                    <ListItem button sx={{ color: 'error.main' }}>
-                        <ListItemIcon sx={{ color: 'error.main' }}><DeleteIcon /></ListItemIcon>
-                        <ListItemText primary="Apagar conversa" />
+                    <ListItem disablePadding>
+                        <ListItemButton sx={{ color: 'error.main' }}
+                        onClick={handleDeleteChat}
+                        >
+                            <ListItemIcon sx={{ color: 'error.main' }}><DeleteIcon /></ListItemIcon>
+                            <ListItemText primary="Apagar conversa" />
+                        </ListItemButton>
                     </ListItem>
                 </List>
             </Box>
