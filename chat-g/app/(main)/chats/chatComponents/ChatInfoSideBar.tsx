@@ -14,11 +14,12 @@ interface ChatInfoSideBarProps{
         name : string;
         avatarUrl : string;
         id : string;
-        chatId : string;
+
     };
+    chatId : string;
     onClose : () => void;
 }
-export default function ChatInfoSideBar({ userData, onClose} : ChatInfoSideBarProps){
+export default function ChatInfoSideBar({ userData, chatId, onClose} : ChatInfoSideBarProps){
     const [userHeaderInfo,  setUserHeaderInfo] = useState({})
     const router = useRouter();
     
@@ -42,9 +43,9 @@ export default function ChatInfoSideBar({ userData, onClose} : ChatInfoSideBarPr
     }, [userData.id])
 
     const handleDeleteChat = async () => {
-        if(!userData.chatId) return;
+        if(!chatId) return;
         try{
-            await deleteDoc(doc(db, 'chats', userData.chatId));
+            await deleteDoc(doc(db, 'chats', chatId));
             router.push("/chats");
         }catch(error){
             console.log("Deu erro excluindo o chat: " + error )

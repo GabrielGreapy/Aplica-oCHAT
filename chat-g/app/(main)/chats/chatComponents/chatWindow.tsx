@@ -250,6 +250,7 @@ export default function ChatWindow( { chatId} : { chatId: string}){
                 
                 <ChatInfoSideBar 
                     userData={headerData} 
+                    chatId={chatId}
                     onClose={() => setIsInfoOpen(false)} 
                 />
             </Drawer>
